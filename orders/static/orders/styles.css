@@ -1,0 +1,316 @@
+body {
+    font-family: Verdana,Arial,Helvetica,sans-serif; 
+}
+
+html, body, #white { 
+    background-color: white;
+}
+
+.updatehere {
+    font-size: 16px;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.update-status input:hover {
+    text-decoration: none; 
+    background-color: #f5c300;
+}
+
+.orderhere {
+    text-align: right;
+    font-size: 13px;
+}
+
+.orderhere a {
+    color: black;
+    font-weight: bold;
+}
+
+.orderhere button:hover {
+    text-decoration: none; 
+    background-color: #f5c300;
+}
+
+h1, h2 {
+    text-align: center; 
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+h3, #Pasta, #Salad {
+    font-size: 18px;  
+    font-weight: bold;
+}
+
+#Pasta, #Salad {
+    margin-left: 170px;
+}
+
+h3 {
+    margin-top: 3px;
+}
+
+#order-row, #title-row {
+    font-size: 18px;  
+    font-weight: bold;
+    height: 30px;
+}
+
+#title-row {
+    color: darkblue;
+}
+
+#banner table {
+    border: thin solid black;
+}
+
+#banner-title {
+    height: 100;
+    padding: 20px; 
+    margin-top: 16px;
+    text-align: center;
+}
+
+#logo {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.blue { 
+    background-color: darkblue; 
+}
+
+.maize {
+    background-color: #f5c300;
+}
+
+li {
+    margin-right: 40px;
+    text-align: center;
+}
+
+.callout { 
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 18px;  
+    text-align: center; 
+    background-color: white; 
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+#header-margin {
+    height: 20px;
+}
+
+.header-body {
+    height: 30px;
+}
+
+#main-margin {
+    height: 20px;
+    background-color: darkblue;
+}
+
+#menubody {
+    background-color: darkblue;
+}
+
+#menu table {
+    background-color: white;
+    border-collapse: collapse;
+}
+
+ #menu th {
+    font-family: Arial,Verdana,Helvetica,sans-serif;
+    height: 15px;
+    text-align: center;
+    line-height: 15px;
+    padding: 5px;
+    text-align: center;
+ }
+
+ #indexTab, #viewOrderTab, #placeOrderTab, #orderStatusTab, #loginTab, #logoutTab {
+    border: 1px solid black;
+}
+
+#menu {
+    margin-left: 120px;
+    margin-top: 15px;
+}
+
+#menu a {
+    color: darkblue;
+}
+
+#menu a:link {
+    text-decoration: none;
+}
+
+#menu a:visited {
+    text-decoration: none;
+}
+
+#menu th:hover {
+    text-decoration: none; 
+    color: white; 
+    background-color: #f5c300;
+}
+
+#menu #youarehere { 
+    background-color: darkblue; 
+    color: white; 
+    border-bottom: 1px solid darkblue;
+}
+
+.foodmenu table {
+    border-collapse: collapse;
+    width: 80%;
+    padding: 5px;
+    text-align: center;
+    margin-left: 70px;
+    margin-bottom: 10px;
+}
+
+.pizza td, .pizza th, .other td, .other th {
+    border-bottom: thin solid black;
+}
+
+.left {
+    text-align: left;
+}
+
+.totalmenu table { 
+    border: none; 
+    text-align: center; 
+    table-layout: fixed;
+    font-size: 60%; 
+    padding: 0; 
+    margin-top: 1px; 
+    margin-bottom: 1px;
+    line-height: 10px;
+}
+
+.totalmenu th {
+    background-color: lightgoldenrodyellow;
+}
+
+table .white {
+    border-bottom: thin solid white;
+}
+
+.white {
+    background-color: white;
+}
+
+.nav-link {
+    display: block;
+    padding: 0;
+}
+
+#user-name {
+    font-size: 15px;
+    margin-top: 15px;
+    margin-right: 10px;
+    text-align: right;
+}
+
+#nav-cart {
+    margin-top: 0px;
+    height: 45px;
+    width: 100px;
+    text-align: left;
+}
+
+.nav-a {
+     position: relative;
+     float: left;
+     top: 1px;
+     line-height: 45px;
+     height: 45px;
+}
+
+.nav-cart-count {
+    color: #f5c300;
+    margin-top: 18px;
+    position: absolute;
+    font-weight: 700;
+    font-family: Arial,sans-serif;
+    line-height: 16px;
+    font-size: 15px;
+}
+
+.nav-cart-count:hover {
+    color: darkblue;
+}
+
+#nav-cart-count {
+    margin-left: 21px;
+    text-align: left;
+}
+
+#basket {
+    margin-left: 16px;
+    text-align: left;
+}
+
+ #nav-cart .nav-cart-icon {
+     display: block;
+     overflow: hidden;
+     position: absolute;
+     top: 5px;
+     background-position: -5px -340px;
+}
+
+.update-order, .update-status {
+    font-size: 16px;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.card {
+    margin-bottom: 0px;
+}
+
+.update-order input:hover, .place-order input:hover {
+    text-decoration: none; 
+    background-color: #f8e69c;
+}
+
+.item-desc {
+    text-align: left;
+    margin-left: 20px;
+    font-size: 17px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+#special-desc {
+    text-align: left;
+    margin-bottom: 0px;
+    margin-left: 20px;
+    font-size: 12px;
+}
+
+.total-desc {
+    font-size: 17px;
+    margin-right: 10px;
+    text-align: right;
+}
+
+#add-pizza input:hover, #order_id input:hover, #add-sub input:hover, #add-pasta input:hover, #add-salad input:hover {
+    text-decoration: none; 
+    background-color: #f8e69c;
+}

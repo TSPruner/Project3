@@ -1,0 +1,387 @@
+{% extends "orders/base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script src="{% static 'orders/index.js' %}"></script>
+{% endblock %}
+
+{% block user %}
+    {% if user %}
+        <div id="user-name">{{ user }}</div>
+    {% endif %}
+{% endblock %}
+
+{% block cart %}
+<div class="basket-link">
+  {% if reg_user %}
+    {% if count == 1 %}
+      <a href="{% url 'viewCart' %}" aria-label="1 item in cart" class="nav-a nav-a-2" id="nav-cart">
+    {% else %}
+      <a href="{% url 'viewCart' %}" aria-label="{{ count }} items in cart" class="nav-a nav-a-2" id="nav-cart">
+    {% endif %}
+      <span class="nav-cart-icon nav-sprite" style="background-image: url('/static/orders/cart.png')">
+        <img src="{% static "orders/cart.png" %}" alt="My cart" height="45" width="45">
+      </span>
+      <span aria-hidden="true" class="nav-cart-count">
+        <span id="nav-cart-count">{{ count }}</span><span id="basket">Basket</span>   
+      </span>
+    </a>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block header %}
+<table width="90%">
+    <tr>
+        <th id="youarehere" width="16%">
+          <a id="youarehere" href="{% url 'index' %}" class="menu-link" data-page="index">Menu</a>
+        </th>
+        <th id="viewOrderTab" width="16%">
+          <a id="viewOrder" href="{% url 'viewOrder' %}" class="menu-link" data-page="viewOrder">View Order</a>
+        </th>
+        {% if reg_user %}
+          <th id="placeOrderTab" width="16%">
+            <a id="placeOrder" href="{% url 'placeOrder' %}" class="menu-link" data-page="placeOrder">Place Order</a>
+          </th>
+        {% else %}
+          <th id="orderStatusTab" width="16%">
+            <a id="orderStatus" href="{% url 'orderStatus' 0 %}" class="menu-link" data-page="orderStatus">Update Order</a>
+          </th>
+        {% endif %}
+        <th id="loginTab" width="16%">
+          <a id="login" href="{% url 'login' %}" class="menu-link" data-page="login">Login</a>
+        </th>
+        <th id="logoutTab" width="16%">
+          <a id="logout" href="{% url 'logout' %}"  class="menu-link" data-page="logout">Logout</a>
+        </th>
+    </tr>
+</table>
+{% endblock %}
+
+{% block body %}
+<div id="main">
+    <div class="callout" width="100%">
+        <p id="main-margin">&nbsp</p>
+        <h2>Our Menu</h2>
+        {% for index in menus %}
+          <div class="totalmenu">
+            <table class="menunav" width="100%">
+              <tr>
+                <th>
+                  <a href="" class="nav-link" data-page="RegularPizza">Regular Pizza</a>
+                </th>
+                <th>
+                  <a href="" class="nav-link" data-page="SicilianPizza">Sicilian Pizza</a>
+                </th>
+                <th>
+                  <a href="" class="nav-link" data-page="Toppings">Toppings</a>
+                </th>
+                <th>
+                  <a href="" class="nav-link" data-page="Subs">Subs</a>
+                </th>
+                <th>
+                  <a href="" class="nav-link" data-page="Pasta">Pasta</a>
+                </th>
+                <th>
+                  <a href="" class="nav-link" data-page="Salad">Salad</a>
+                </th>
+                <th>
+                  <a href="" class="nav-link" data-page="Dinner Platters">Dinner Platters</a>
+                </th>
+              </tr>
+              <tr>
+                <td class="white" colspan="3">&nbsp</td>
+              </tr>
+            </table>
+          </div>
+          <div class="foodmenu" width="100%">
+            {% if index == 1 %}
+              <div class="row no-gutters" id="order-row">
+                <div class="col-md-4">
+                  <p>&nbsp</p>
+                </div>
+                <div class="col-md-4">
+                  <h3><a id="RegularPizza">Regular Pizza</a></h3>
+                </div>
+                <div class="col-md-4">
+                  <span class="orderhere">
+                    {% if reg_user %}
+                      <button id="add-regular" title="Build and add regular pizza to cart"><a href="{% url 'regPizza' %}">Order Here</a></button>
+                    {% endif %}
+                  </span>
+                </div>
+              </div>
+              <table class="pizza">
+                <tr>
+                  <th width="30%"></th>
+                  <th width="25%">Small</th>
+                  <th width="25%">Large</th>
+                </tr>
+                {% if regularPizzas %}
+                  {% for pizza in regularPizzas %}
+                    {% if pizza.size == "Small" %}
+                          <td>{{ pizza.get_numToppings_display }}</td>
+                        <td class="price"> {{ pizza.price }} </td>
+                    {% else %}
+                        <td class="price"> {{ pizza.price }} </td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                <tr>
+                    <td class="white" colspan="3">&nbsp</td>
+                </tr>
+              </table>
+            {% elif index == 2 %}
+              <div class="row no-gutters" id="order-row">
+                <div class="col-md-4">
+                  <p>&nbsp</p>
+                </div>
+                <div class="col-md-4">
+                  <h3><a id="SicilianPizza">Sicilian Pizza</a></h3>
+                </div>
+                <div class="col-md-4">
+                  <span class="orderhere">
+                    {% if reg_user %}
+                      <button id="add-sicilian" title="Build and add sicilian pizza to cart"><a href="{% url 'sicPizza' %}">Order Here</a></button>
+                    {% endif %}
+                  </span>
+                </div>
+              </div>
+              <table class="pizza">
+                <tr>
+                  <th width="30%"></th>
+                  <th width="25%">Small</th>
+                  <th width="25%">Large</th>
+                </tr>
+                {% if sicilianPizzas %}
+                  {% for pizza in sicilianPizzas %}
+                    {% if pizza.size == "Small" %}
+                        <td>{{ pizza.get_numToppings_display }}</td>
+                        <td class="price"> {{ pizza.price }} </td>
+                    {% else %}
+                        <td class="price"> {{ pizza.price }} </td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                <tr>
+                    <td class="white" colspan="3">&nbsp</td>
+                </tr>
+              </table>
+            {% elif index == 3 %}
+              {% if pizzaToppings %}
+                <table class="toppings">
+                  <tr>
+                    <th colspan="3"><a id="Toppings">Toppings</a></th>
+                  </tr>
+                  {% for item in pizzaToppings %}
+                    <tr>
+                      <td colspan="3">{{ item.item }}
+                        {% if item.incInSpecial %}
+                          *
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% if forloop.last %}
+                      <tr>
+                        <td colspan="3" style="font-weight:bold">{{ noteToppings }}
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                <tr>
+                    <td class="white" colspan="3">&nbsp</td>
+                </tr>
+              </table>  
+            {% elif index == 4 %}
+              {% if subs %}
+              <div class="row no-gutters" id="order-row">
+                  <div class="col-md-4">
+                    <p>&nbsp</p>
+                  </div>
+                  <div class="col-md-4">
+                    <h3><a id="Subs">Subs</a></h3>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="orderhere">
+                      {% if reg_user %}
+                        <button id="add-sub" title="Build and add sub to cart"><a href="{% url 'subOrder' %}">Order Here</a></button>
+                      {% endif %}
+                    </span>
+                  </div>
+                </div>
+                <table class="pizza">
+                  <tr>
+                    <th width="40%"></th>
+                    <th width="20%">Small</th>
+                    <th width="20%">Large</th>
+                  </tr>
+                  {% for item in subs %}
+                    {% if item.smallAvail %}
+                      {% if item.size == "Small" %}
+                        <tr>
+                          <td class="left"> {{ item.subType }} </td>
+                          <td class="price"> {{ item.price }} </td>
+                      {% else %}
+                          <td class="price"> {{ item.price }} </td>
+                        </tr>
+                        {% if item.mushroomsAvail %}
+                          <tr>
+                            <td class="left">+ Mushrooms</td>
+                            <td class="price"> +{{ item.extrasPrice }} </td>
+                            <td class="price"> +{{ item.extrasPrice }} </td>
+                          </tr>   
+                        {% endif %} 
+                        {% if item.peppersAvail %}     
+                          <tr>
+                            <td class="left">+ Green Peppers</td>
+                            <td class="price"> +{{ item.extrasPrice }} </td>
+                            <td class="price"> +{{ item.extrasPrice }} </td>
+                          </tr>   
+                        {% endif %} 
+                        {% if item.onionsAvail %}  
+                          <tr>
+                            <td class="left">+ Onions</td>
+                            <td class="price"> +{{ item.extrasPrice }} </td>
+                            <td class="price"> +{{ item.extrasPrice }} </td>
+                          </tr>   
+                        {% endif %}
+                      {% endif %}
+                      {% if forloop.last %}
+                        <tr>
+                          <td class="left">Extra Cheese on any sub </td>
+                          <td class="price"> +{{ item.extrasPrice }} </td>
+                          <td class="price"> +{{ item.extrasPrice }} </td>    
+                        </tr>                    
+                      {% endif %}
+                    {% else %}
+                      <tr>
+                        <td class="left">{{ item.subType }}</td>
+                        <td>&nbsp</td>
+                        <td class="price"> {{ item.price }} </td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                  <tr>
+                      <td class="white" colspan="3">&nbsp</td>
+                  </tr>
+                </table>
+              {% endif %}
+            {% elif index == 5 %}
+              {% if pasta %}
+                <table class="other">
+                  <tr>
+                    <th width="60%"><a id="Pasta">Pasta</a></th>
+                    <th width="20%"  class="orderhere">
+                      {% if reg_user %}
+                        <button id="add-pasta" title="Select pasta to add to cart"><a href="{% url 'pasta' %}">Order Here</a></button>
+                      {% endif %}
+                    </th>
+                  </tr>
+                  {% for item in pasta %}
+                    {% if item.size == "Reg" %}
+                      <tr>
+                        <td class="left" width="60%">Baked Ziti {{ item.pastaType }} </td>
+                        <td class="price" width="20%"> {{ item.price }} </td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                  <tr>
+                    <td class="white" colspan="2">&nbsp</td>
+                  </tr>
+                </table>
+              {% endif %}
+            {% elif index == 6 %}
+              {% if salads %}
+                <table class="other">
+                  <tr>
+                    <th width="60%"><a id="Salad">Salad</a></th>
+                    <th width="20%" class="orderhere">
+                      {% if reg_user %}
+                        <button id="add-salad" title="Select salad to add to cart"><a href="{% url 'salad' %}">Order Here</a></button>
+                      {% endif %}
+                    </th>
+                  </tr>
+                  {% for item in salads %}
+                    {% if item.size == "Reg" %}
+                      <tr>
+                        <td class="left" width="60%"> {{ item.saladType }} </td>
+                        <td class="price" width="20%"> {{ item.price }} </td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                  <tr>
+                    <td class="white" colspan="2">&nbsp</td>
+                  </tr>
+                </table>
+              {% endif %}
+            {% elif index == 7 %}
+              <div class="row no-gutters" id="order-row">
+                <div class="col-md-4">
+                  <p>&nbsp</p>
+                </div>
+                <div class="col-md-4">
+                  <h3><a id="Dinner Platters">Dinner Platters</a></h3>
+                </div>
+                <div class="col-md-4">
+                  <span class="orderhere">
+                    {% if reg_user %}
+                      <button id="add-dinner" title="Build and dinner platter to cart"><a href="{% url 'dinner' %}">Order Here</a></button>
+                    {% endif %}
+                  </span>
+                </div>
+              </div>
+              <table class="pizza">
+                {% if dinnerSalads %}
+                  <tr>
+                    <th width="40%"></th>
+                    <th width="20%">Small</th>
+                    <th width="20%">Large</th>
+                  </tr>
+                  {% for item in dinnerSalads %}
+                    {% if item.dinnerAvail %}
+                      {% if item.size == "Small" %}
+                        <tr>
+                          <td class="left"> {{ item.saladType }} </td>
+                          <td class="price"> {{ item.price }} </td>
+                      {% else %}
+                          <td class="price"> {{ item.price }} </td>
+                        </tr>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                {% if dinnerPasta %}
+                  {% for item in dinnerPasta %}
+                    {% if item.dinnerAvail %}
+                      {% if item.size == "Small" %}
+                          {% if item.pastaType == "w/ Mozzarella" %}
+                          <tr>
+                            <td class="left"> Baked Ziti </td>
+                          {% elif item.pastaType == "w/ Chicken" %}
+                          <tr>
+                            <td class="left"> Chicken Parm </td>
+                          {% else %}
+                          <tr>
+                            <td class="left"> Meatball Parm </td>
+                          {% endif %}
+                          <td class="price"> {{ item.price }} </td>
+                      {% else %}
+                          <td class="price"> {{ item.price }} </td>
+                        </tr>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                <tr>
+                  <td class="white" colspan="3">&nbsp</td>
+                </tr>
+              </table>
+            {% endif %}
+          </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

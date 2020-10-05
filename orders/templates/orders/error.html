@@ -1,0 +1,74 @@
+{% extends "orders/base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script src="{% static 'orders/order.js' %}"></script>
+{% endblock %}
+
+{% block header %}
+<table width="90%">
+    <tr>
+      {% if tab == "cart" %}
+        <th id="youarehere" width="16%">
+            <a id="youarehere" href="{% url 'index' %}" class="menu-link" data-page="index">Menu</a></button>
+        </th>
+      {% else %}
+        <th id="indexTab" width="16%">
+            <a id="index" href="{% url 'index' %}" class="menu-link" data-page="index">Menu</a></button>
+        </th>
+      {% endif %}
+      {% if tab == "view" %}
+        <th id="youarehere" width="16%">
+          <a id="youarehere" href="{% url 'index' %}" class="menu-link" data-page="index">Menu</a></button>
+        </th>
+      {% else %}
+        <th id="viewOrderTab" width="16%">
+            <a id="viewOrder" href="{% url 'viewOrder' %}" class="menu-link" data-page="viewOrder">View Order</a></button>
+        </th>
+      {% endif %}
+      {% if user %}
+        {% if tab == "order" %}
+          <th id="youarehere" width="16%">
+              <a id="youarehere" href="{% url 'index' %}" class="menu-link" data-page="index">Menu</a></button>
+          </th>
+        {% else %}
+          <th id="placeOrderTab" width="16%">
+            <a id="placeOrder" href="{% url 'placeOrder' %}" class="menu-link" data-page="placeOrder">Place Order</a>
+          </th>
+        {% endif %}
+      {% else %}
+        {% if tab == "status" %}
+          <th id="youarehere" width="16%">
+              <a id="youarehere" href="{% url 'index' %}" class="menu-link" data-page="index">Menu</a></button>
+          </th>
+        {% else %}
+          <th id="orderStatusTab" width="16%">
+            <a id="orderStatus" href="{% url 'orderStatus' 0 %}" class="menu-link" data-page="orderStatus">Update Status</a>
+          </th>
+        {% endif %}
+      {% endif %}
+        <th id="loginTab" width="16%">
+            <a id="login" href="{% url 'login' %}" class="menu-link" data-page="login">Login</a></button>
+        </th>
+        <th id="logoutTab" width="16%">
+            <a id="logout" href="{% url 'logout' %}" class="menu-link" data-page="logout">Logout</a></button>
+        </th>
+    </tr>
+</table>
+{% endblock %}
+
+{% block body %}
+<div id="main">
+    <div class="callout" width="100%">
+        <p id="main-margin">&nbsp</p>
+        <h1>Error</h1>
+
+        {{ message }}
+
+        <p id="main-margin">&nbsp</p>
+
+        <a href="{% url 'index' %}">Return to menu.</a>
+    </div>
+</div>
+{% endblock %}

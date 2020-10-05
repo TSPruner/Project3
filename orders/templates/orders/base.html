@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html id="top">
+    <head>
+        <title>Wolverine's Pizza & Subs</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'orders/styles.css' %}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {%block title %}{% endblock %}
+    </head>
+    <body>
+        <div id="banner">
+          <table width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+              <tr>
+                <td class="blue" width="20%">&nbsp;</td>
+                <td width="50%">
+                  <h1 id="banner-title">Wolverine's Pizza & Subs</h1>
+                </td>
+                <td width="10%">
+                    <img src="{% static "orders/logo_michigan.png" %}" alt="Logo" height="100">
+                </td>
+                <td class="maize" width="20%">&nbsp;</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card mb-3" style="max-width: 1620px;">
+            <div class="row no-gutters">
+                <div class="col-md-9" id="header-margin">
+                    <p>&nbsp</p>
+                </div>
+                <div class="col-md-2" id="header-margin">
+                    {% block user %}{% endblock %}
+                </div>
+                <div class="col-md-1" id="header-margin">
+                    {% block cart %}{% endblock %}
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-md-2" class="header-body">
+                    <p>&nbsp</p>
+                </div>
+                <div class="col-md-8" class="header-body">
+                    <div id="menu">{%block header %}{% endblock %}</div>
+                </div>
+                <div class="col-md-2" class="header-body">
+                    <p>&nbsp</p>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-md-2" class="white">
+                    <p>&nbsp</p>
+                </div>
+                <div class="col-md-8" id="menubody">
+                    <div width="80%">{% block body %}{% endblock %}</div>
+                </div>
+                <div class="col-md-2" class="white">
+                    <p>&nbsp</p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

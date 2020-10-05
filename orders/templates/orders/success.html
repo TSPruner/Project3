@@ -1,0 +1,49 @@
+{% extends "orders/base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script src="{% static 'orders/order.js' %}"></script>
+{% endblock %}
+
+{% block header %}
+<table width="90%">
+    <tr>
+        <th id="indexTab" width="16%">
+            <a id="index" href="{% url 'index' %}" class="menu-link" data-page="index">Menu</a></button>
+        </th>
+        <th id="viewOrderTab" width="16%">
+            <a id="viewOrder" href="{% url 'viewOrder' %}" class="menu-link" data-page="viewOrder">View Order</a></button>
+        </th>
+        <th id="youarehere" width="16%">
+        <a id="youarehere" href="{% url 'placeOrder' %}" class="menu-link" data-page="placeOrder">Place Order</a>
+        </th>
+        <th id="loginTab" width="16%">
+            <a id="login" href="{% url 'login' %}" class="menu-link" data-page="login">Login</a></button>
+        </th>
+        <th id="logoutTab" width="16%">
+            <a id="logout" href="{% url 'logout' %}" class="menu-link" data-page="logout">Logout</a></button>
+        </th>
+    </tr>
+</table>
+{% endblock %}
+
+{% block body %}
+<div id="main">
+    <div class="callout" width="100%">
+        <p id="main-margin">&nbsp</p>
+        <h1>Success</h1>
+
+        {{ message }}
+
+        <p id="main-margin">&nbsp</p>
+
+        <div class="card mb-3">
+            <div class="row no-gutters">
+                <div class="col-md-6"><a href="{% url 'viewOrder' %}">View Order</a></div>
+                <div class="col-md-6"><a href="{% url 'index' %}">Return to menu</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

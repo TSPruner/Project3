@@ -1,0 +1,19 @@
+{% extends "users/base.html" %}
+
+{% block body %}
+<h1>Register</h1>
+{% if message %}
+    <div>
+        {{ message }}
+    </div>
+{% endif %}
+<form id="new-user" action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    <input name="username" autocomplete="off" maxlength=50 autofocus placeholder="Username" type="text"/>
+    <input name="password" autocomplete="off" maxlength=50 autofocus placeholder="Password" type="password"/>
+    <input name="email" autocomplete="off" maxlength=50 autofocus placeholder="Email Address" type="email"/>
+    <input name="first" autocomplete="off" maxlength=50 autofocus placeholder="First Name" type="text"/>
+    <input name="last" autocomplete="off" maxlength=50 autofocus placeholder="Last Name" type="text"/>
+    <input type="submit" value="Register"/>
+</form>
+{% endblock %}

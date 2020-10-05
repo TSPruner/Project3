@@ -1,0 +1,99 @@
+{% extends "orders/base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script src="{% static 'orders/pizza.js' %}"></script>
+{% endblock %}
+
+{% block header %}
+<table width="90%">
+    <tr>
+        <th id="youarehere" width="16%">
+          <a id="youarehere" href="{% url 'index' %}" class="menu-link" data-page="index">Menu</a></button>
+        </th>
+        <th id="viewOrderTab" width="16%">
+          <a id="viewOrder" href="{% url 'viewOrder' %}" class="menu-link" data-page="viewOrder">View Order</a></button>
+        </th>
+        <th id="placeOrderTab" width="16%">
+          <a id="placeOrder" href="{% url 'placeOrder' %}" class="menu-link" data-page="placeOrder">Place Order</a>
+        </th>
+        <th id="loginTab" width="16%">
+          <a id="login" href="{% url 'login' %}" class="menu-link" data-page="login">Login</a></button>
+        </th>
+        <th id="logoutTab" width="16%">
+          <a id="logout" href="{% url 'logout' %}"  class="menu-link" data-page="logout">Logout</a></button>
+        </th>
+    </tr>
+</table>
+{% endblock %}
+
+{% block body %}
+<div id="main">
+    <div class="callout" width="100%">
+        <p id="main-margin">&nbsp</p>
+        <h2>Add Sicilian Pizza to Cart</h2>
+        <form id="add-pizza" action="{% url 'sicPizza' %}" method="post">
+          {% csrf_token %}
+          <ul id="type-selections" style="list-style-type:none">
+            <li>Select pizza type to see topping selections:</li>
+            <li>
+              <select name="numToppings" id="numToppings" onchange="GetSelectedValue(this)" required>
+                <option>Please Select</option>
+                {% for pizza in sicilianPizzas %}
+                  <option value="{{ pizza.numToppings }}">
+                      {{pizza.size}} {{pizza.get_numToppings_display }}: ${{ pizza.price }} 
+                  </option>
+                {% endfor %}
+              </select>
+            </li>
+          </ul>
+          <ul id="size-selections" style="list-style-type:none">
+            <li id="sizes">
+              <select name="size" id="size">
+                <option value="Small">Small</option>
+                <option value="Large">Large</option>
+              </select>
+            </li>
+          </ul>
+          <ul id="topping-selections" style="list-style-type:none">
+            <li id="topping-title">Select or update topping choices:</li>
+            <li id="1"> 
+              <select name="topping1" id="topping1" required>
+                <option>Please Select</option>
+                {% for item in pizzaToppings %}
+                  {% if item.avail %}
+                    <option value="{{ item.item }}">
+                      {{ item.item }}
+                      {% if item.incInSpecial %}
+                        *
+                      {% endif %}
+                    </option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </li>
+            <li>{{ noteToppings }}</li>
+          </ul>
+          <ul style="list-style-type:none">
+            <li>
+                <label for="comment">Special Instructions (limit 300 characters)</label>
+                <textarea class="form-control" maxlength=300 rows="5" id="comment" name="comment"></textarea>
+            </li>
+          </ul>
+          <ul style="list-style-type:none">
+            <li>&nbsp</li>
+            <li>
+                <input id="addtocart" type="submit" value="Add to Cart"/>
+            </li>
+          </ul>
+        </form>
+        <ul id="footer" style="list-style-type:none">
+          <li>
+            <a href="{% url 'index' %}">Return to Menu</a>
+            <p class="white">&nbsp</p>
+          </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,359 @@
+{% extends "orders/base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script src="{% static 'orders/order.js' %}"></script>
+{% endblock %}
+
+{% block user %}
+    {% if user %}
+        <div id="user-name">{{ user }}</div>
+    {% endif %}
+{% endblock %}
+
+{% block header %}
+<table width="90%">
+    <tr>
+        <th id="indexTab" width="16%">
+            <a id="index" href="{% url 'index' %}" class="menu-link" data-page="index">Menu</a></button>
+        </th>
+        <th id="youarehere" width="16%">
+            <a id="youarehere" href="{% url 'viewOrder' %}" class="menu-link" data-page="viewOrder">View Order</a></button>
+        </th>
+        {% if reg_user %}
+          <th id="placeOrderTab" width="16%">
+            <a id="placeOrder" href="{% url 'placeOrder' %}" class="menu-link" data-page="placeOrder">Place Order</a>
+          </th>
+        {% else %}
+          <th id="orderStatusTab" width="16%">
+            <a id="orderStatus" href="{% url 'orderStatus' 0 %}" class="menu-link" data-page="orderStatus">Update Status</a>
+          </th>
+        {% endif %}
+        <th id="loginTab" width="16%">
+            <a id="login" href="{% url 'login' %}" class="menu-link" data-page="login">Login</a></button>
+        </th>
+        <th id="logoutTab" width="16%">
+            <a id="logout" href="{% url 'logout' %}" class="menu-link" data-page="logout">Logout</a></button>
+        </th>
+    </tr>
+</table>
+{% endblock %}
+
+{% block body %}
+<div id="main">
+    <div class="callout" width="100%">
+      <p id="main-margin">&nbsp</p>
+      <div class="card">
+        {% if submitted %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-12">
+              <p>&nbsp</p>
+            </div>
+          </div>
+          <div class="row no-gutters" id="title-row">
+            <div class="col-md-12">
+              <h3>Submitted Orders:</h3>
+            </div>
+          </div>
+        {% endif %}
+        {% for item in submitted %}
+          {% if item.itemChoice != 0 and item.itemChoice != 3 %}
+            <div class="row no-gutters" id="order-row">
+              <div class="col-md-12">
+                <p>&nbsp</p>
+              </div>
+            </div>
+          {% endif %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-2">
+            {% if item.itemChoice == 0 or item.itemChoice == 3 %}
+              <p>&nbsp</p>
+            {% else %}
+              <p class="item-desc">Order#: {{ item.orderId }}</p>
+            {% endif %} 
+            </div>
+            <div class="col-md-8">
+              <p class="item-desc">{{ item.itemDesc }}</p>
+            </div>
+            <div class="col-md-2">
+              {% if item.itemChoice == 0 or item.itemChoice == 3 %}
+                <p>&nbsp</p>
+              {% else %}
+                <span class="updatehere">
+                  {% if not reg_user %}
+                    <form class="update-status" action="{% url 'orderStatus' item.orderId %}" method="post">
+                      {% csrf_token %}
+                          <input name="update" id="remove{{ forloop.counter }}" type="hidden" value="{{ item.id }}"/>
+                          <input id="update-submitted" type="submit" title="Click to update order status to next state" value="Next"/>
+                    </form>
+                  {% endif %}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+        {% if inProgress %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-12">
+              <p>&nbsp</p>
+            </div>
+          </div>
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-12">
+              <p>&nbsp</p>
+            </div>
+          </div>
+          <div class="row no-gutters" id="title-row">
+            <div class="col-md-12">
+              <h3>In Progress - Order Started:</h3>
+            </div>
+          </div>
+        {% endif %}
+        {% for item in inProgress %}
+          {% if item.itemChoice != 0 and item.itemChoice != 3 %}
+            <div class="row no-gutters" id="order-row">
+              <div class="col-md-12">
+                <p>&nbsp</p>
+              </div>
+            </div>
+          {% endif %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-2">
+            {% if item.itemChoice == 0 or item.itemChoice == 3 %}
+              <p>&nbsp</p>
+            {% else %}
+              <p class="item-desc">Order#: {{ item.orderId }}</p>
+            {% endif %} 
+            </div>
+            <div class="col-md-8">
+              <p class="item-desc">{{ item.itemDesc }}</p>
+            </div>
+            <div class="col-md-2">
+              {% if item.itemChoice == 0 or item.itemChoice == 3 %}
+                <p>&nbsp</p>
+              {% else %}
+                <span class="updatehere">
+                  {% if not reg_user %}
+                    <form class="update-status" action="{% url 'orderStatus' item.orderId %}" method="post">
+                      {% csrf_token %}
+                          <input name="update" id="remove{{ forloop.counter }}" type="hidden" value="{{ item.id }}"/>
+                          <input id="update-inProgress" type="submit" title="Click to update order status to next state" value="Next"/>
+                    </form>
+                  {% endif %}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+        {% if assembling %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-12">
+              <p>&nbsp</p>
+            </div>
+          </div>
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-12">
+              <p>&nbsp</p>
+            </div>
+          </div>
+          <div class="row no-gutters" id="title-row">
+            <div class="col-md-12">
+              <h3>In Progress - Assembling Orders:</h3>
+            </div>
+          </div>
+        {% endif %}
+        {% for item in assembling %}
+          {% if item.itemChoice != 0 and item.itemChoice != 3 %}
+            <div class="row no-gutters" id="order-row">
+              <div class="col-md-12">
+                <p>&nbsp</p>
+              </div>
+            </div>
+          {% endif %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-2">
+            {% if item.itemChoice == 0 or item.itemChoice == 3 %}
+              <p>&nbsp</p>
+            {% else %}
+              <p class="item-desc">Order#: {{ item.orderId }}</p>
+            {% endif %} 
+            </div>
+            <div class="col-md-8">
+                <p class="item-desc">{{ item.itemDesc }}</p>
+            </div>
+            <div class="col-md-2">
+              {% if item.itemChoice == 0 or item.itemChoice == 3 %}
+                <p>&nbsp</p>
+              {% else %}
+                <span class="updatehere">
+                  {% if not reg_user %}
+                    <form class="update-status" action="{% url 'orderStatus' item.orderId %}" method="post">
+                      {% csrf_token %}
+                          <input name="update" id="remove{{ forloop.counter }}" type="hidden" value="{{ item.id }}"/>
+                          <input id="update-assembling" type="submit" title="Click to update order status to next state" value="Next"/>
+                    </form>
+                  {% endif %}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+        {% if cooking %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-12">
+              <p>&nbsp</p>
+            </div>
+          </div>
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-12">
+              <p>&nbsp</p>
+            </div>
+          </div>
+          <div class="row no-gutters" id="title-row">
+            <div class="col-md-12">
+              <h3>In Progress - Cooking In Oven Orders:</h3>
+            </div>
+          </div>
+        {% endif %}
+        {% for item in cooking %}
+          {% if item.itemChoice != 0 and item.itemChoice != 3 %}
+            <div class="row no-gutters" id="order-row">
+              <div class="col-md-12">
+                <p>&nbsp</p>
+              </div>
+            </div>
+          {% endif %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-2">
+            {% if item.itemChoice == 0 or item.itemChoice == 3 %}
+              <p>&nbsp</p>
+            {% else %}
+              <p class="item-desc">Order#: {{ item.orderId }}</p>
+            {% endif %} 
+            </div>
+            <div class="col-md-8">
+              <p class="item-desc">{{ item.itemDesc }}</p>
+            </div>
+            <div class="col-md-2">
+              {% if item.itemChoice == 0 or item.itemChoice == 3 %}
+                <p>&nbsp</p>
+              {% else %}
+                <span class="updatehere">
+                  {% if not reg_user %}
+                    <form class="update-status" action="{% url 'orderStatus' item.orderId %}" method="post">
+                      {% csrf_token %}
+                          <input name="update" id="remove{{ forloop.counter }}" type="hidden" value="{{ item.id }}"/>
+                          <input id="update-cooking" type="submit" title="Click to update order status to next state" value="Next"/>
+                    </form>
+                  {% endif %}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+        {% if packaging %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-12">
+              <p>&nbsp</p>
+            </div>
+          </div>
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-12">
+              <p>&nbsp</p>
+            </div>
+          </div>
+          <div class="row no-gutters" id="title-row">
+            <div class="col-md-12">
+              <h3>In Progress - Packaging Orders:</h3>
+            </div>
+          </div>
+        {% endif %}
+        {% for item in packaging %}
+          {% if item.itemChoice != 0 and item.itemChoice != 3 %}
+            <div class="row no-gutters" id="order-row">
+              <div class="col-md-12">
+                <p>&nbsp</p>
+              </div>
+            </div>
+          {% endif %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-2">
+            {% if item.itemChoice == 0 or item.itemChoice == 3 %}
+              <p>&nbsp</p>
+            {% else %}
+              <p class="item-desc">Order#: {{ item.orderId }}</p>
+            {% endif %} 
+            </div>
+            <div class="col-md-8">
+              <p class="item-desc">{{ item.itemDesc }}</p>
+            </div>
+            <div class="col-md-2">
+              {% if item.itemChoice == 0 or item.itemChoice == 3 %}
+                <p>&nbsp</p>
+              {% else %}
+                <span class="updatehere">
+                  {% if not reg_user %}
+                    <form class="update-status" action="{% url 'orderStatus' item.orderId %}" method="post">
+                      {% csrf_token %}
+                          <input name="update" id="remove{{ forloop.counter }}" type="hidden" value="{{ item.id }}"/>
+                          <input id="update-packagining" type="submit" title="Click to update order status to next state" value="Next"/>
+                    </form>
+                  {% endif %}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+        {% if completed %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-12">
+              <p>&nbsp</p>
+            </div>
+          </div>
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-12">
+              <p>&nbsp</p>
+            </div>
+          </div>
+          <div class="row no-gutters" id="title-row">
+            <div class="col-md-12">
+              <h3>Completed Orders:</h3>
+            </div>
+          </div>
+        {% endif %}
+        {% for item in completed %}
+          {% if item.itemChoice != 0 and item.itemChoice != 3 %}
+            <div class="row no-gutters" id="order-row">
+              <div class="col-md-12">
+                <p>&nbsp</p>
+              </div>
+            </div>
+          {% endif %}
+          <div class="row no-gutters" id="order-row">
+            <div class="col-md-2">
+            {% if item.itemChoice == 0 or item.itemChoice == 3 %}
+              <p>&nbsp</p>
+            {% else %}
+              <p class="item-desc">Order#: {{ item.orderId }}</p>
+            {% endif %} 
+            </div>
+            <div class="col-md-10">
+              <p class="item-desc">{{ item.itemDesc }}</p>
+            </div>
+          </div>
+        {% endfor %}
+        <div class="row no-gutters" id="order-row">
+          <div class="col-md-12">
+            <p>&nbsp</p>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="row no-gutters">
+          <div class="col-md-12"><a href="{% url 'index' %}">Return to menu</a></div>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
